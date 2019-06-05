@@ -1,9 +1,5 @@
 defmodule ElixirConwaysGameOfLife do
 
-  def world_is_empty do
-    %World{empty: true}
-  end
-
   def add_cell_to_world(cell) do
     World.add_to_grid(cell)
   end
@@ -12,12 +8,16 @@ defmodule ElixirConwaysGameOfLife do
     Cell.location_to_cell(location)
   end
 
-  def set_living_at(cell) do
-    Cell.set_living(cell)
+  def set_living_at(location) do
+    Cell.set_living(location)
+  end
+
+  def set_dead_at(location) do
+    Cell.set_kill(location)
   end
 
   # defp tick ([]), do: true
-  # #recurse through grids
+  #recurse through grids
   # defp tick([%World{} | tail]), do: tick(tail)
   # defp tick([_head | _tail]), do: false
 

@@ -6,13 +6,7 @@ setup do
   %{world: %World{}, cell: %Cell{}}
 end
 
-  test "the world is empty" do
-    new_state = ElixirConwaysGameOfLife.world_is_empty
-
-    assert new_state.empty == true
-  end
-
-  test "a cell can be added to the world", context do
+  test "a_cell_can_be_added_to_the_world", context do
     new_world = ElixirConwaysGameOfLife.add_cell_to_world(context[:cell])
 
     assert new_world.grid == [%Cell{}]
@@ -25,21 +19,28 @@ end
     assert new_world.empty == false
   end
 
-  test "a location can be added to a cell", context do
+  test "a_location_can_be_added_to_a_cell", context do
     location = {0,0}
     new_cell = ElixirConwaysGameOfLife.add_location_to_cell(location)
 
     assert new_cell.location == {0,0}
   end
 
-  test "a_cell_is_alive_at_the_location_that_is_added_to_a_cell", context do
+  test "a_cell_is_alive_at_the_location_added_to_a_cell", context do
     location = {0,0}
-    new_cell = ElixirConwaysGameOfLife.add_location_to_cell(location)
-    living_cell = Cell.make_alive(context[:cell])
+    new_cell = ElixirConwaysGameOfLife.set_living_at(location)
 
     assert new_cell.location == {0,0}
-    assert Cell.get_living(living_cell) === true
+    assert new_cell.living == true
   end
+
+  test "a_cell_is_not_alive_at_the_location_added_to_a_cell", context do
+    location = {1,1}
+    new_cell = ElixirConwaysGameOfLife.set_dead_at(location)
+    assert new_cell.location == {1,1}
+    assert new_cell.living == false
+  end
+  
 end
 
 # A location getter

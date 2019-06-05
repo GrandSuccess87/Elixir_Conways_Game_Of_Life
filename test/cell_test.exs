@@ -9,19 +9,6 @@ defmodule CellTest do
   test "cell_living_status_initialized_false", context do
     assert Cell.get_living(context[:cell]) == false
   end
-
-  test "cell_living_status_updates_to_true", context do
-    living_cell = Cell.make_alive(context[:cell])
-  #   assert Cell.get_living(living_cell) == true
-  end
-
-  test "cell_living_status_updates_from_true_to_false", context do
-    living_cell = Cell.make_alive(context[:cell])
-    assert Cell.get_living(living_cell) == true
-
-    living_cell = Cell.kill(context[:cell])
-    assert Cell.get_living(living_cell) === false
-  end
 end
 
 # A location getter
