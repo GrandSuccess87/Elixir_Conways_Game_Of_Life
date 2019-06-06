@@ -1,8 +1,8 @@
 defmodule ElixirConwaysGameOfLife do
 
-  def add_cell_to_world(cell) do
-    World.add_to_grid(cell)
-  end
+  # def add_cell_to_world(cell) do
+  #   World.add_to_grid(cell)
+  # end
 
   def add_location_to_cell(location) do
     Cell.location_to_cell(location)
