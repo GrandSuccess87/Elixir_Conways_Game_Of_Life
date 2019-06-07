@@ -24,20 +24,24 @@ def adjacent_cells([x,y]) do
   [[x,y+1], [x+1,y+1], [x+1,y], [x+1,y-1], [x-1,y-1], [x,y-1], [x-1,y+1], [x-1,y]]
 end
 
-def is_living_cell_at_location(world, [x,y]) do
-  false
-end
-
 # def is_living_cell_at_location(world, [x,y]) do
-#   world = world.grid
-#   cell = %Cell{}
-#   Enum.filter(world, fn([cell]) -> cell.living == true end)
-#   cond do
-#     cell.living == true -> [cell.location]
-#     cell.living == false ->
-#   end
-#
+#   false
 # end
+
+def is_living_cell_at_location(world, [x,y]) do
+  world = world.grid
+  
+  # IO.inspect(world)
+
+#   # Enum.map(world, fn [cell] -> [cell.living == true] end)
+Enum.filter(world, fn cell -> cell.living == true end)
+
+
+#   # cond do
+#   #   [cell.living == true] -> [cell.location]
+#   # end
+#
+end
 
 # def get_grid_of_world(grid, cell, acc) do
 #   cell_location = cell.location
