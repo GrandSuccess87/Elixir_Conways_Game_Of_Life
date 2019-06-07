@@ -6,17 +6,36 @@ setup do
   %{world: %World{}, cell: %Cell{}}
 end
 
-  test "a_cell_can_be_added_to_the_world", context do
-    new_world = ElixirConwaysGameOfLife.add_cell_to_world(context[:cell])
+  test "a new world is empty" do
+    new_world = World.set_empty
 
-    assert new_world.grid == [%Cell{}]
+    assert new_world.empty
   end
 
-  test "after_adding_a_cell_the_world_is_not_empty", context do
-    new_world = ElixirConwaysGameOfLife.add_cell_to_world(context[:cell])
+  test "a cell can be added to the world" do
+    world = World.set_empty
+    world_with_one_cell = World.add_to_grid(world, %Cell{})
 
-    assert new_world.grid == [%Cell{}]
-    assert new_world.empty == false
+    assert world_with_one_cell.grid == [%Cell{}]
+    refute world_with_one_cell.empty
+  end
+
+  test "two cells can be added to the world" do
+    world = World.set_empty
+    world_with_cell = World.add_to_grid(world, %Cell{})
+    world_with_two_cells = World.add_to_grid(world_with_cell, %Cell{})
+
+    assert world_with_two_cells.grid == [%Cell{}, %Cell{}]
+    refute world_with_two_cells.empty
+
+  end
+
+  test "two cells with locations can be added to the world" do
+    world = World.set_empty
+    world_with_cell = World.add_to_grid(world, %Cell{location: [1,0]})
+    world_with_two_cells = World.add_to_grid(world_with_cell, %Cell{location: [-10,5]})
+
+    assert world_with_two_cells.grid == [%Cell{location: [1,0]}, %Cell{location: [-10,5]}]
   end
 
   test "a_location_can_be_added_to_a_cell", context do
@@ -40,12 +59,5 @@ end
     assert new_cell.location == {1,1}
     assert new_cell.living == false
   end
-  
-end
 
-# A location getter
-# I want to test that a cell can be added, but first I need a location getter
-# A counter to count/track neighboring cells
-# Need an "IsAlive" method to loop through the cells and see if there is more than 3
-# and see if there is 2 or 3
-# Need an "IsDead" method to loop through the cells and see if there are more than 3 cells together
+end
