@@ -53,7 +53,7 @@ end
     assert new_cell.living == true
   end
 
-  test "a_cell_is_not_alive_at_the_location_added_to_a_cell", context do
+test "a_cell_is_not_alive_at_the_location_added_to_a_cell", context do
     location = {1,1}
     new_cell = ElixirConwaysGameOfLife.set_dead_at(location)
     assert new_cell.location == {1,1}

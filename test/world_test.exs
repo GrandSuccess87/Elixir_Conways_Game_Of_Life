@@ -54,30 +54,65 @@ defmodule WorldTest do
     test "it detects a grid space with two adjacent living cells" do
       world = World.set_empty
 
-      world_with_first_living_cell = World.add_to_grid(world, %Cell{living: true, location: [1,5]})
-      world_with_second_living_cell = World.add_to_grid(world_with_first_living_cell, %Cell{living: true, location: [1,6]})
+      world_with_origin_cell = World.add_to_grid(world, %Cell{living: true, location: [1,5]})
+      world_with_first_adjacent_living_cell = World.add_to_grid(world_with_origin_cell, %Cell{living: true, location: [1,4]})
+      world_with_two_adjacent_living_cells = World.add_to_grid(world_with_first_adjacent_living_cell, %Cell{living: true, location: [1,6]})
 
-      assert world_with_second_living_cell.grid == [%Cell{living: true, location: [1,5]}, %Cell{living: true, location: [1,6]}]
+      assert world_with_two_adjacent_living_cells.grid == [%Cell{living: true, location: [1,5]}, %Cell{living: true, location: [1,4]}, %Cell{living: true, location: [1,6]}]
     end
 
     test "it detects a grid space with three adjacent living cells" do
       world = World.set_empty
 
-      world_with_first_living_cell = World.add_to_grid(world, %Cell{living: true, location: [1,1]})
-      world_with_second_living_cell = World.add_to_grid(world_with_first_living_cell, %Cell{living: true, location: [1,2]})
-      world_with_third_living_cell = World.add_to_grid(world_with_second_living_cell, %Cell{living: true, location: [2,1]})
+      world_with_origin_cell = World.add_to_grid(world, %Cell{living: true, location: [1,5]})
+      world_with_first_adjacent_living_cell = World.add_to_grid(world_with_origin_cell, %Cell{living: true, location: [1,4]})
+      world_with_second_adjacent_living_cell = World.add_to_grid(world_with_first_adjacent_living_cell, %Cell{living: true, location: [1,6]})
+      world_with_three_adjacent_living_cells = World.add_to_grid(world_with_second_adjacent_living_cell, %Cell{living: true, location: [0,5]})
 
-      assert world_with_third_living_cell.grid == [%Cell{living: true, location: [1,1]}, %Cell{living: true, location: [1,2]}, %Cell{living: true, location: [2,1]}]
+      assert world_with_three_adjacent_living_cells.grid == [%Cell{living: true, location: [1,5]}, %Cell{living: true, location: [1,4]}, %Cell{living: true, location: [1,6]}, %Cell{living: true, location: [0,5]}]
     end
 
     test "it detects a live cell with fewer than two adjacent living cells" do
       world = World.set_empty
+      origin = [1,1]
 
-      world_with_first_living_cell = World.add_to_grid(world, %Cell{living: true, location: [1,1]})
-      world_with_first_living_cell_dies = World.add_to_grid(world, %Cell{living: false, location: [1,0]})
+      world_with_origin_cell = World.add_to_grid(world, %Cell{living: true, location: origin})
+      world_with_first_adjacent_living_cell = World.add_to_grid(world_with_origin_cell, %Cell{living: true, location: [1,2]})
+      world_with_first_adjacent_dead_cell = World.add_to_grid(world_with_first_adjacent_living_cell, %Cell{living: false, location: [1,0]})
+      IO.inspect([head | tail] = world_with_first_adjacent_dead_cell.grid)
+      IO.inspect("head: #{inspect(head.location)}")
+      IO.inspect("tail: #{inspect(tail)}")
+      is_dead = World.kill_cell(origin)
+      IO.inspect(is_dead)
 
-      world_with_first_living_cell.grid == [%Cell{living: false, location: [1,1]}]
-      assert world_with_first_living_cell_dies.grid == [%Cell{living: false, location: [1,0]}]
+      assert is_dead == [%Cell{living: false, location: origin}]
     end
 
+    test "detects a live cell with more than three live neighbors and updates its living status to dead" do
+      world = World.set_empty
+      origin = [1,5]
+
+      world_with_origin_cell = World.add_to_grid(world, %Cell{living: true, location: origin})
+      world_with_first_adjacent_living_cell = World.add_to_grid(world_with_origin_cell, %Cell{living: true, location: [1,4]})
+      world_with_second_adjacent_living_cell = World.add_to_grid(world_with_first_adjacent_living_cell, %Cell{living: true, location: [1,6]})
+      world_with_third_adjacent_living_cells = World.add_to_grid(world_with_second_adjacent_living_cell, %Cell{living: true, location: [0,5]})
+      world_with_four_adjacent_living_cells = World.add_to_grid(world_with_third_adjacent_living_cells, %Cell{living: true, location: [0,4]})
+      is_dead = World.kill_cell(origin)
+
+      assert is_dead == [%Cell{living: false, location: origin}]
+    end
+
+    test "detects a dead cell with exactly three live neighbors and updates its living status to alive" do
+      world = World.set_empty
+      origin = [1,5]
+
+      world_with_origin_cell = World.add_to_grid(world, %Cell{living: false, location: origin})
+      world_with_first_adjacent_living_cell = World.add_to_grid(world_with_origin_cell, %Cell{living: true, location: [1,4]})
+      world_with_second_adjacent_living_cell = World.add_to_grid(world_with_first_adjacent_living_cell, %Cell{living: true, location: [1,6]})
+      world_with_third_adjacent_living_cells = World.add_to_grid(world_with_second_adjacent_living_cell, %Cell{living: true, location: [0,5]})
+      is_alive = World.dead_to_alive(origin)
+
+
+      assert is_alive == [%Cell{living: true, location: origin}]
+    end
 end
