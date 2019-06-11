@@ -79,6 +79,7 @@ defmodule WorldTest do
       world_with_origin_cell = World.add_to_grid(world, %Cell{living: true, location: origin})
       world_with_first_adjacent_living_cell = World.add_to_grid(world_with_origin_cell, %Cell{living: true, location: [1,2]})
       world_with_first_adjacent_dead_cell = World.add_to_grid(world_with_first_adjacent_living_cell, %Cell{living: false, location: [1,0]})
+      IO.inspect(world_with_first_adjacent_dead_cell.grid)
       IO.inspect([head | tail] = world_with_first_adjacent_dead_cell.grid)
       IO.inspect("head: #{inspect(head.location)}")
       IO.inspect("tail: #{inspect(tail)}")
