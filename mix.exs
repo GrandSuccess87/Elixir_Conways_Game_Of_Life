@@ -32,7 +32,6 @@ defmodule ElixirConwaysGameOfLife.MixProject do
   def deps do
   [
     {:mix_test_watch, "~> 0.8", only: :dev, runtime: false},
-    {:elixir_conways_game_of_life, "~> 0.1.0"}
   ]
   end
 
