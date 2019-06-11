@@ -79,12 +79,12 @@ defmodule WorldTest do
       world_with_origin_cell = World.add_to_grid(world, %Cell{living: true, location: origin})
       world_with_first_adjacent_living_cell = World.add_to_grid(world_with_origin_cell, %Cell{living: true, location: [1,2]})
       world_with_first_adjacent_dead_cell = World.add_to_grid(world_with_first_adjacent_living_cell, %Cell{living: false, location: [1,0]})
-      IO.inspect(world_with_first_adjacent_dead_cell.grid)
-      IO.inspect([head | tail] = world_with_first_adjacent_dead_cell.grid)
-      IO.inspect("head: #{inspect(head.location)}")
-      IO.inspect("tail: #{inspect(tail)}")
+      # IO.inspect(world_with_first_adjacent_dead_cell.grid)
+      # IO.inspect([head | tail] = world_with_first_adjacent_dead_cell.grid)
+      # IO.inspect("head: #{inspect(head.location)}")
+      # IO.inspect("tail: #{inspect(tail)}")
       is_dead = World.kill_cell(origin)
-      IO.inspect(is_dead)
+      # IO.inspect(is_dead)
 
       assert is_dead == [%Cell{living: false, location: origin}]
     end
@@ -115,5 +115,51 @@ defmodule WorldTest do
 
 
       assert is_alive == [%Cell{living: true, location: origin}]
+    end
+
+    test "finds a cell at the correct location" do
+      world = World.set_empty
+      location = [1,1]
+
+      world_with_origin_cell = World.add_to_grid(world, %Cell{living: true, location: location})
+      cell_found = World.find_cell_at_location_in_world(world_with_origin_cell, location)
+
+      assert cell_found == %Cell{living: true, location: location}
+    end
+
+    test "checks if cell at location is living" do
+      world = World.set_empty
+      location = [1,1]
+      world_with_origin_cell = World.add_to_grid(world, %Cell{living: true, location: location})
+
+      assert World.cell_at_location_alive?(world_with_origin_cell, location) == true
+    end
+
+    test "checks if cell at location is living in empty location" do
+      world = World.set_empty
+      location = [1,1]
+      world_with_origin_cell = World.add_to_grid(world, %Cell{living: true, location: location})
+
+      assert World.cell_at_location_alive?(world_with_origin_cell, [1,0]) == false
+    end
+
+    test "counts if adjacent cells are alive" do
+      world = World.set_empty
+      origin = [2,3]
+      # neighbors = [[2,4], [3,4], [3,3], [3,2], [1,2], [2,2], [1,4], [1,3]]
+
+      world_with_origin_cell = World.add_to_grid(world, %Cell{living: true, location: origin})
+      world_with_first_cell = World.add_to_grid(world_with_origin_cell, %Cell{living: true, location: [2,4]})
+      world_with_second_cell = World.add_to_grid(world_with_first_cell, %Cell{living: true, location: [3,4]})
+      world_with_third_cell = World.add_to_grid(world_with_second_cell, %Cell{living: false, location: [3,3]})
+      world_with_fourth_cell = World.add_to_grid(world_with_third_cell, %Cell{living: false, location: [3,2]})
+      world_with_fifth_cell = World.add_to_grid(world_with_fourth_cell, %Cell{living: false, location: [1,2]})
+      world_with_sixth_cell = World.add_to_grid(world_with_fifth_cell, %Cell{living: false, location: [2,2]})
+      world_with_seventh_cell = World.add_to_grid(world_with_sixth_cell, %Cell{living: false, location: [1,4]})
+      world_with_eigth_cell = World.add_to_grid(world_with_seventh_cell, %Cell{living: false, location: [1,3]})
+
+
+
+      assert World.living_cell_count(world_with_eigth_cell, origin) == 3
     end
 end
